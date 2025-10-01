@@ -1,0 +1,4130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumVerse - High School Study Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --primary-glow: rgba(108, 99, 255, 0.6);
+            --secondary: #ff6b6b;
+            --dark-bg: #0f0f23;
+            --dark-card: #1a1a2e;
+            --dark-text: #e2e2e2;
+            --light-bg: #f5f5f7;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 15px var(--primary-glow);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            transition: var(--transition);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader-content {
+            text-align: center;
+        }
+
+        .quantum-loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(108, 99, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .preloader-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 10%;
+            left: 5%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary);
+            bottom: 10%;
+            right: 5%;
+            animation: float 12s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        body.light-mode header {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: var(--dark-card);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            width: 40%;
+            transition: var(--transition);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        body.light-mode .search-container {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--dark-text);
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        body.light-mode .search-input {
+            color: var(--light-text);
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--dark-card);
+            border: none;
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            padding: 0 3px;
+        }
+
+        body.light-mode .theme-toggle {
+            background: var(--light-card);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            transition: var(--transition);
+            left: 3px;
+        }
+
+        body.light-mode .theme-toggle::before {
+            left: calc(100% - 23px);
+        }
+
+        .theme-icon {
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .sun-icon {
+            color: #ffa500;
+        }
+
+        .moon-icon {
+            color: #e2e2e2;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Subject Filter */
+        .subject-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--dark-card);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 50px;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        body.light-mode .filter-btn {
+            background: var(--light-card);
+            color: var(--light-text);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+
+        .subject-card {
+            background: var(--dark-card);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            position: relative;
+            cursor: pointer;
+        }
+
+        body.light-mode .subject-card {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow), var(--glow);
+            border-color: var(--primary);
+        }
+
+        .subject-icon {
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(255, 107, 107, 0.1));
+            color: var(--primary);
+        }
+
+        .subject-content {
+            padding: 1.5rem;
+        }
+
+        .subject-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .subject-desc {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .chapters-count {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        /* Chapters Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--dark-card);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-mode .modal-content {
+            background: var(--light-card);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        body.light-mode .close-modal {
+            color: var(--light-text);
+        }
+
+        .close-modal:hover {
+            color: var(--secondary);
+            transform: rotate(90deg);
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        .chapter-card {
+            background: rgba(108, 99, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: var(--transition);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            cursor: pointer;
+        }
+
+        body.light-mode .chapter-card {
+            background: rgba(108, 99, 255, 0.03);
+        }
+
+        .chapter-card:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .chapter-number {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .chapter-name {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            margin-top: 4rem;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: var(--dark-card);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        body.light-mode .resource-card {
+            background: var(--light-card);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            border-color: var(--primary);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .resource-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .resource-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        /* Resources Modal */
+        .resources-modal-content {
+            width: 95%;
+            max-width: 1200px;
+        }
+
+        .resources-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .resources-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .resource-types {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .resource-type-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(108, 99, 255, 0.1);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 50px;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        body.light-mode .resource-type-btn {
+            background: rgba(108, 99, 255, 0.05);
+            color: var(--light-text);
+        }
+
+        .resource-type-btn.active, .resource-type-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .resource-item {
+            background: rgba(108, 99, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+
+        body.light-mode .resource-item {
+            background: rgba(108, 99, 255, 0.03);
+        }
+
+        .resource-item:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .resource-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resource-icon-small {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .resource-name {
+            font-weight: 500;
+        }
+
+        .resource-size {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 3px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-card);
+            padding: 2rem 5%;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(108, 99, 255, 0.2);
+        }
+
+        body.light-mode footer {
+            background: var(--light-card);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.light-mode .footer-links a {
+            color: var(--light-text);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(108, 99, 255, 0.2);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .resources-list {
+                grid-template-columns: 1fr;
+            }
+            /* Fix horizontal scrolling */
+body {
+    overflow-x: hidden;
+}
+
+/* Make tables responsive */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* Responsive iframes/videos */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Mobile-first base styles */
+* {
+    box-sizing: border-box;
+}
+
+/* Responsive typography */
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Responsive containers */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile navigation */
+@media (max-width: 768px) {
+    /* Convert horizontal nav to vertical */
+    .desktop-nav {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: block;
+    }
+    
+    /* Stack elements vertically */
+    .row, .flex-container {
+        flex-direction: column;
+    }
+    
+    /* Adjust font sizes */
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    
+    /* Reduce padding/margins */
+    .section {
+        padding: 1rem 0;
+    }
+    
+    /* Make buttons touch-friendly */
+    button, .btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px 16px;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+    }
+}
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="quantum-loader"></div>
+            <div class="preloader-text">QuantumVerse</div>
+        </div>
+    </div>
+
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-atom logo-icon"></i>
+            <span class="logo-text">QuantumVerse</span>
+        </div>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search for subjects, chapters, resources...">
+        </div>
+        
+        <div class="header-controls">
+            <button class="theme-toggle">
+                <i class="fas fa-sun theme-icon sun-icon"></i>
+                <i class="fas fa-moon theme-icon moon-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="section-title">Explore Subjects</h1>
+        
+        <!-- Subject Filter -->
+        <div class="subject-filter">
+            <button class="filter-btn active" data-filter="all">All Subjects</button>
+            <button class="filter-btn" data-filter="science">Science</button>
+            <button class="filter-btn" data-filter="maths">Mathematics</button>
+            <button class="filter-btn" data-filter="english">English</button>
+            <button class="filter-btn" data-filter="social">Social Science</button>
+            <button class="filter-btn" data-filter="hindi">Hindi</button>
+            <button class="filter-btn" data-filter="it">Information Technology</button>
+        </div>
+        
+        <!-- Subjects Grid -->
+        <div class="subjects-grid">
+            <!-- Physics -->
+            <div class="subject-card" data-subject="physics" data-category="science">
+                <div class="subject-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="subject-content">
+                    <h3 class="subject-title">Physics</h3>
+                    <p class="subject-desc">Explore the fundamental laws of the universe</p>
+                    <div class="chapters-count">
+                        <i class="fas fa-book"></i>
+                        <span>5 Chapters</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chemistry -->
+            <div class="subject-card" data-subject="chemistry" data-category="science">
+                <div class="subject-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div class="subject-content">
+                    <h3 class="subject-title">Chemistry</h3>
+                    <p class="subject-desc">Study matter, its properties, and transformations</p>
+                    <div class="chapters-count">
+                        <i class="fas fa-book"></i>
+                        <span>4 Chapters</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Biology -->
+            <div class="subject-card" data-subject="biology" data-category="science">
+                <div class="subject-icon">
+                    <i class="fas fa-dna"></i>
+                </div>
+                <div class="subject-content">
+                    <h3 class="subject-title">Biology</h3>
+                    <p class="subject-desc">Discover the science of life and living organisms</p>
+                    <div class="chapters-count">
+                        <i class="fas fa-book"></i>
+                        <span>3 Chapters</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mathematics -->
+            <div class="subject-card" data-subject="mathematics" data-category="maths">
+                <div class="subject-icon">
+                    <i class="fas fa-square-root-alt"></i>
+                </div>
+                <div class="subject-content">
+                    <h3 class="subject-title">Mathematics</h3>
+                    <p class="subject-desc">Master numbers, shapes, and patterns</p>
+                    <div class="chapters-count">
+                        <i class="fas fa-book"></i>
+                        <span>12 Chapters</span>
+                    </div>
+                </div>
+            </div>
+            
+           <!-- Remove this English card -->
+<!-- <div class="subject-card" data-subject="english" data-category="english"> ... </div> -->
+
+<!-- Add these individual English cards instead -->
+<div class="subject-card" data-subject="grammar" data-category="english">
+    <div class="subject-icon">
+        <i class="fas fa-language"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">English Grammar</h3>
+        <p class="subject-desc">Tenses, writing skills, and language rules</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>8 Topics</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="beehive" data-category="english">
+    <div class="subject-icon">
+        <i class="fas fa-book-reader"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">Beehive - Literature</h3>
+        <p class="subject-desc">Prose and poetry from NCERT Beehive textbook</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>17 Chapters</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="moments" data-category="english">
+    <div class="subject-icon">
+        <i class="fas fa-book-open"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">Moments - Literature</h3>
+        <p class="subject-desc">Supplementary reader with stories and lessons</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>9 Chapters</span>
+        </div>
+    </div>
+</div>
+            
+            
+<!-- <div class="subject-card" data-subject="social" data-category="social"> ... </div> -->
+
+<!-- Add these individual subject cards instead -->
+<div class="subject-card" data-subject="history" data-category="social">
+    <div class="subject-icon">
+        <i class="fas fa-monument"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">History</h3>
+        <p class="subject-desc">Study of past events and civilizations</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>5 Chapters</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="political" data-category="social">
+    <div class="subject-icon">
+        <i class="fas fa-landmark"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">Political Science</h3>
+        <p class="subject-desc">Government systems and political behavior</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>5 Chapters</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="geography" data-category="social">
+    <div class="subject-icon">
+        <i class="fas fa-globe-asia"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">Geography</h3>
+        <p class="subject-desc">Earth's landscapes and environments</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>6 Chapters</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="economics" data-category="social">
+    <div class="subject-icon">
+        <i class="fas fa-chart-line"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">Economics</h3>
+        <p class="subject-desc">Production, distribution, and consumption</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>4 Chapters</span>
+        </div>
+    </div>
+</div>
+            
+            <!-- Remove this Hindi card -->
+<!-- <div class="subject-card" data-subject="hindi" data-category="hindi"> ... </div> -->
+
+<!-- Add these individual Hindi cards instead -->
+<div class="subject-card" data-subject="hindi-grammar" data-category="hindi">
+    <div class="subject-icon">
+        <i class="fas fa-language"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">हिंदी व्याकरण</h3>
+        <p class="subject-desc">व्याकरण नियम, लेखन कौशल और भाषा ज्ञान</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>5 विषय</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="kshitij" data-category="hindi">
+    <div class="subject-icon">
+        <i class="fas fa-book-reader"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">क्षितिज - साहित्य</h3>
+        <p class="subject-desc">एनसीईआरटी क्षितिज पाठ्यपुस्तक से गद्य और पद्य</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>13 पाठ</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="kritika" data-category="hindi">
+    <div class="subject-icon">
+        <i class="fas fa-book-open"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">कृतिका - साहित्य</h3>
+        <p class="subject-desc">पूरक पाठ्यपुस्तक with कहानियाँ और पाठ</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>3 पाठ</span>
+        </div>
+    </div>
+</div>
+            
+           <!-- Remove the single IT card -->
+<!-- <div class="subject-card" data-subject="it" data-category="it"> ... </div> -->
+
+<!-- Add two separate IT cards -->
+<div class="subject-card" data-subject="it-parta" data-category="it">
+    <div class="subject-icon">
+        <i class="fas fa-user-tie"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">IT - Part A</h3>
+        <p class="subject-desc">Employability Skills - Communication, Management, Entrepreneurship</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>5 Chapters</span>
+        </div>
+    </div>
+</div>
+
+<div class="subject-card" data-subject="it-partb" data-category="it">
+    <div class="subject-icon">
+        <i class="fas fa-laptop-code"></i>
+    </div>
+    <div class="subject-content">
+        <h3 class="subject-title">IT - Part B</h3>
+        <p class="subject-desc">Subject Specific Skills - Software, Spreadsheets, Presentations</p>
+        <div class="chapters-count">
+            <i class="fas fa-book"></i>
+            <span>5 Chapters</span>
+        </div>
+    </div>
+</div>
+        <!-- Resources Section -->
+        <div class="resources-section">
+            <h1 class="section-title">Featured Resources</h1>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <i class="fas fa-file-pdf resource-icon"></i>
+                    <h3 class="resource-title">NCERT Textbooks</h3>
+                    <p class="resource-desc">Complete PDFs of all NCERT textbooks</p>
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Explore
+                    </button>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-question-circle resource-icon"></i>
+                    <h3 class="resource-title">Exemplar Problems</h3>
+                    <p class="resource-desc">NCERT exemplar questions with solutions</p>
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Explore
+                    </button>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-sticky-note resource-icon"></i>
+                    <h3 class="resource-title">Revision Notes</h3>
+                    <p class="resource-desc">Concise notes for quick revision</p>
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Explore
+                    </button>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-file-alt resource-icon"></i>
+                    <h3 class="resource-title">Question Papers</h3>
+                    <p class="resource-desc">Previous years' question papers</p>
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Explore
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chapters Modal -->
+    <div class="modal" id="chaptersModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Subject Chapters</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="chapters-grid">
+                <!-- Chapters will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resources Modal -->
+    <div class="modal" id="resourcesModal">
+        <div class="modal-content resources-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Chapter Resources</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="resources-header">
+                <h3 class="resources-title" id="resourcesTitle">Resources</h3>
+                <div class="resource-types">
+                    <button class="resource-type-btn active" data-type="all">All Resources</button>
+                    <button class="resource-type-btn" data-type="textbook">Textbook</button>
+                    <button class="resource-type-btn" data-type="notes">Notes</button>
+                    <button class="resource-type-btn" data-type="exemplar">Exemplar</button>
+                </div>
+            </div>
+            <div class="resources-list">
+                <!-- Resources will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">QuantumVerse</h3>
+                <p>Your ultimate high school study companion with comprehensive NCERT resources and interactive learning tools.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-book"></i> NCERT Books</a></li>
+                    <li><a href="#"><i class="fas fa-question"></i> Exemplar Problems</a></li>
+                    <li><a href="#"><i class="fas fa-sticky-note"></i> Revision Notes</a></li>
+                    <li><a href="#"><i class="fas fa-file-alt"></i> Question Papers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Subjects</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-atom"></i> Physics</a></li>
+                    <li><a href="#"><i class="fas fa-flask"></i> Chemistry</a></li>
+                    <li><a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a></li>
+                    <li><a href="#"><i class="fas fa-dna"></i> Biology</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2024 QuantumVerse. All rights reserved. Made with ❤️ - Smooth Operator. 
+
+        </div>
+    </footer>
+
+    <script>
+        // Clean Professional Preloader
+const preloader = document.getElementById('preloader');
+
+preloader.innerHTML = `
+    <div class="minimal-preloader">
+        <div class="logo-container">
+            <div class="quantum-logo">
+                <div class="logo-orb"></div>
+                <div class="logo-ring"></div>
+                <div class="logo-glow"></div>
+            </div>
+        </div>
+        
+        <div class="loading-info">
+            <div class="app-name">QuantumVerse</div>
+            <div class="app-subtitle">Study Hub</div>
+            
+            <div class="progress-container">
+                <div class="progress-track">
+                    <div class="progress-bar"></div>
+                </div>
+                <div class="progress-text">Loading</div>
+            </div>
+        </div>
+        
+        <div class="loading-hint">
+            <span class="hint-text">Preparing your learning environment</span>
+        </div>
+    </div>
+`;
+
+// Clean, minimalist CSS
+const minimalStyles = `
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0f0f23;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .minimal-preloader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .logo-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+
+    .quantum-logo {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .logo-orb {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background: #6c63ff;
+        border-radius: 50%;
+        animation: gentle-pulse 2s ease-in-out infinite;
+    }
+
+    .logo-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        border: 2px solid rgba(108, 99, 255, 0.3);
+        border-radius: 50%;
+        animation: slow-rotate 8s linear infinite;
+    }
+
+    .logo-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        border: 1px solid rgba(108, 99, 255, 0.1);
+        border-radius: 50%;
+        animation: gentle-expand 3s ease-in-out infinite;
+    }
+
+    .loading-info {
+        text-align: center;
+    }
+
+    .app-name {
+        font-size: 2.5rem;
+        font-weight: 300;
+        background: linear-gradient(135deg, #6c63ff, #ff6b6b);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    .app-subtitle {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 3px;
+        font-weight: 300;
+        margin-bottom: 30px;
+    }
+
+    .progress-container {
+        width: 300px;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #6c63ff, #ff6b6b);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 300;
+    }
+
+    .loading-hint {
+        position: absolute;
+        bottom: 40px;
+        text-align: center;
+    }
+
+    .hint-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    /* Subtle Animations */
+    @keyframes gentle-pulse {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4);
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 0 0 10px rgba(108, 99, 255, 0);
+        }
+    }
+
+    @keyframes slow-rotate {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes gentle-expand {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.5;
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 0.2;
+        }
+    }
+
+    /* Smooth entrance for main content */
+    @keyframes smooth-appear {
+        from { 
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = minimalStyles;
+document.head.appendChild(styleSheet);
+
+// Clean loading logic
+let progress = 0;
+const progressBar = document.querySelector('.progress-bar');
+const progressText = document.querySelector('.progress-text');
+const hints = [
+    "Preparing your learning environment",
+    "Loading study materials",
+    "Almost ready",
+    "Optimizing performance"
+];
+
+function updateProgress() {
+    if (progress < 100) {
+        progress += Math.random() * 8 + 2; // 2-10% increments
+        if (progress > 100) progress = 100;
+        
+        progressBar.style.width = progress + '%';
+        
+        // Update hint text every 25%
+        if (progress % 25 < 5) { // Only change near 25% marks
+            const hintIndex = Math.floor(progress / 25);
+            document.querySelector('.hint-text').textContent = hints[Math.min(hintIndex, hints.length - 1)];
+        }
+        
+        // Simulate realistic loading times
+        const delay = progress < 70 ? 100 : 200; // Slow down near completion
+        setTimeout(updateProgress, delay);
+    } else {
+        completeLoading();
+    }
+}
+
+function completeLoading() {
+    progressText.textContent = "Ready";
+    
+    // Add completion animation
+    document.querySelector('.logo-orb').style.animation = 'none';
+    document.querySelector('.logo-orb').style.transform = 'translate(-50%, -50%) scale(1.2)';
+    document.querySelector('.logo-orb').style.background = '#4CAF50';
+    
+    // Smooth transition out
+    setTimeout(() => {
+        preloader.style.opacity = '0';
+        preloader.style.transition = 'opacity 0.8s ease';
+        
+        setTimeout(() => {
+            preloader.style.display = 'none';
+            document.querySelector('.container').style.animation = 'smooth-appear 1s ease-out';
+        }, 800);
+    }, 1000);
+}
+
+// Start loading
+setTimeout(updateProgress, 500);
+
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+        });
+
+        // Subject Filter
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const subjectCards = document.querySelectorAll('.subject-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                subjectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Data for subjects and resources
+        const subjectsData = {
+            physics: {
+                name: "Physics",
+                chapters: [
+                    { number: 1, name: "Motion" },
+                    { number: 2, name: "Newton's Law of Motion and Force" },
+                    { number: 3, name: "Gravitation" },
+                    { number: 4, name: "Work, Energy and Power" },
+                    { number: 5, name: "Sound" }
+                ]
+            },
+            chemistry: {
+                name: "Chemistry",
+                chapters: [
+                    { number: 1, name: "Matter in Our Surroundings" },
+                    { number: 2, name: "Is Matter Around Us Pure" },
+                    { number: 3, name: "Atoms and Molecules" },
+                    { number: 4, name: "Atomic Structure" }
+                ]
+            },
+            biology: {
+                name: "Biology",
+                chapters: [
+                    { number: 1, name: "Cell" },
+                    { number: 2, name: "Tissues" },
+                    { number: 3, name: "Improvement in Food Resources" }
+                ]
+            },
+            mathematics: {
+                name: "Mathematics",
+                chapters: [
+                    { number: 1, name: "Number System" },
+                    { number: 2, name: "Polynomials" },
+                    { number: 3, name: "Coordinate Geometry" },
+                    { number: 4, name: "Linear Equation in 2 Variables" },
+                    { number: 5, name: "Euclid's Geometry" },
+                    { number: 6, name: "Lines and Angles" },
+                    { number: 7, name: "Triangles" },
+                    { number: 8, name: "Quadrilaterals" },
+                    { number: 9, name: "Circles" },
+                    { number: 10, name: "Heron's Formula" },
+                    { number: 11, name: "Surface Area and Volume" },
+                    { number: 12, name: "Statistics" },
+                ]
+            },
+            // Remove the english subject and add individual English components
+
+    grammar: {
+        name: "English Grammar",
+        chapters: [
+            { number: 1, name: "Tenses" },
+            { number: 2, name: "Subject-Verb Concord" },
+            { number: 3, name: "Modals" },
+            { number: 4, name: "Determiners" },
+            { number: 5, name: "Reported Speech" },
+            { number: 6, name: "Diary Entry" },
+            { number: 7, name: "Descriptive Paragraph" },
+            { number: 8, name: "Story Writing" }
+        ]
+    },
+    
+    beehive: {
+        name: "Beehive - Literature",
+        chapters: [
+            { number: 1, name: "The Fun They Had" },
+            { number: 2, name: "The Road Not Taken" },
+            { number: 3, name: "The Sound of Music" },
+            { number: 4, name: "Wind" },
+            { number: 5, name: "The Little Girl" },
+            { number: 6, name: "Rain On the Roof" },
+            { number: 7, name: "A Truly Beautiful Mind" },
+            { number: 8, name: "The Lake Isle of Innisfree" },
+            { number: 9, name: "The Snake and the Mirror" },
+            { number: 10, name: "The Legend of The Northland" },
+            { number: 11, name: "My Childhood" },
+            { number: 12, name: "No Men are Foreign" },
+            { number: 13, name: "Reach for the Top" },
+            { number: 14, name: "On Killing a Tree" },
+            { number: 15, name: "Kathmandu" },
+            { number: 16, name: "A Slumber Did My Spirit Seal" },
+            { number: 17, name: "If I Were You" },
+            
+        ]
+    },
+    
+    moments: {
+        name: "Moments - Literature", 
+        chapters: [
+            { number: 1, name: "The Lost Child" },
+            { number: 2, name: "The Adventures of Toto" },
+            { number: 3, name: "Iswaran the Storyteller" },
+            { number: 4, name: "In the Kingdom of Fools" },
+            { number: 5, name: "The Happy Prince" },
+            { number: 6, name: "Weathering the Storm in Ersama" },
+            { number: 7, name: "The Last Leaf" },
+            { number: 8, name: "A House is Not a Home" },
+            { number: 9, name: "The Beggar" }
+        ]
+    },
+    history: {
+        name: "History",
+        chapters: [
+            { number: 1, name: "The French Revolution" },
+            { number: 2, name: "Socialism in Europe" },
+            { number: 3, name: "Nazism and the Rise of Hitler" },
+            { number: 4, name: "Forest Society and Colonialism" },
+            { number: 5, name: "Pastoralists in the Modern World" },
+        ]
+    },
+    
+    political: {
+        name: "Political Science", 
+        chapters: [
+            { number: 1, name: "What is Democracy? Why Democracy?" },
+            { number: 2, name: "Constitutional Design" },
+            { number: 3, name: "Electoral Politics" },
+            { number: 4, name: "Working of Institutions" },
+            { number: 5, name: "Democratic Rights" },
+        ]
+    },
+    
+    geography: {
+        name: "Geography",
+        chapters: [
+            { number: 1, name: "India - Size and Location" },
+            { number: 2, name: "Physical Features of India" },
+            { number: 3, name: "Drainage" },
+            { number: 4, name: "Climate" },
+            { number: 5, name: "Natural Vegetation and Wildlife" },
+            { number: 6, name: "Population" },
+        ]
+    },
+    
+    economics: {
+        name: "Economics",
+        chapters: [
+            { number: 1, name: "The Story of Village Palampur" },
+            { number: 2, name: "People as Resource" },
+            { number: 3, name: "Poverty as a Challenge" },
+            { number: 4, name: "Food Security in India" },
+        ]
+    },
+    "hindi-grammar": {
+        name: "हिंदी व्याकरण",
+        chapters: [
+            { number: 1, name: "उपसर्ग और प्रत्यय" },
+            { number: 2, name: "समास " },
+            { number: 3, name: "अर्थ के आधार पर वाक्य भेद" },
+            { number: 4, name: "अलंकार" },
+            { number: 5, name: "लेखन कौशल " },
+        ]
+    },
+    
+    kshitij: {
+        name: "क्षितिज - साहित्य",
+        chapters: [
+            { number: 1, name: "दो बैलों की कथा" },
+            { number: 2, name: "ल्हासा की ओर" },
+            { number: 3, name: "उपभोक्तावाद की संस्कृति" },
+            { number: 4, name: "साँवले सपनों की याद" },
+            { number: 5, name: "प्रेमचंद के फटे जूते" },
+            { number: 6, name: "मेरे बचपन के दिन" },
+            { number: 7, name: "साखियाँ एवं सबद" },
+            { number: 8, name: "वाख" },
+            { number: 9, name: "सवैये" },
+            { number: 10, name: "कैदी और कोकिला" },
+            { number: 11, name: "ग्राम श्री" },
+            { number: 12, name: "मेघ आए" },
+            { number: 13, name: "बच्चे काम पर जा रहे हैं" }
+        ]
+    },
+    
+    kritika: {
+        name: "कृतिका - साहित्य",
+        chapters: [
+            { number: 1, name: "इस जल प्रलय में" },
+            { number: 2, name: "मेरे संग की औरतें" },
+            { number: 3, name: "रीढ़ की हड्डी" },
+        ]
+    },
+    // Remove the complex IT structure and add simple subjects
+
+    // ... existing subjects ...
+    
+    // Simple separate subjects for IT parts
+    "it-parta": {
+        name: "IT - Part A (Employability Skills)",
+        chapters: [
+            { number: 1, name: "Communication Skills" },
+            { number: 2, name: "Self-Management Skills" },
+            { number: 3, name: "Basic ICT Skills" },
+            { number: 4, name: "Entrepreneurial Skills" },
+            { number: 5, name: "Green Skills" }
+        ]
+    },
+    
+    "it-partb": {
+        name: "IT - Part B (Subject Specific Skills)", 
+        chapters: [
+            { number: 1, name: "Introduction to IT-ITeS Industry" },
+            { number: 2, name: "Data Entry & Keyboarding Skills" },
+            { number: 3, name: "Digital Documentation" },
+            { number: 4, name: "Electronic Spreadsheet" },
+            { number: 5, name: "Digital Presentation" }
+        ]
+    }
+
+};
+
+        // Resources data for each chapter
+        const resourcesData = {
+            // Physics resources
+            "physics-1": [
+                { name: "NCERT Textbook - Motion", type: "textbook", size: "4.2 MB", url: "https://drive.google.com/file/d/1PN-mRqDypb9b6KKlysc3m7T-CtyfSe9l/view?usp=drive_link" },
+                { name: "Motion - Detailed Notes", type: "notes", size: "1.8 MB", url: "#" },
+                { name: "Exemplar Problems - Motion", type: "exemplar", size: "2.1 MB", url: "https://drive.google.com/file/d/1kiRC9KBPOO3RxngMU-oqk9McHXOn-E2L/view?usp=drive_link" },
+            ],
+            "physics-2": [
+                { name: "NCERT Textbook - Newton's Laws", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/19FzjFEcZKl9ibPcrzvG5F7fESmSdj4b_/view?usp=drive_link" },
+                { name: "Newton's Laws - Revision Notes", type: "notes", size: "1.5 MB", url: "#" },
+                { name: "Exemplar Problems - Newton's Laws", type: "exemplar", size: "2.3 MB", url: "https://drive.google.com/file/d/1a2NLglGj9NAZXVIc4Piat4NErax99eLc/view?usp=drive_link" },
+                { name: "PYQs - NLM", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - NLM", type: "sample", size: "1.2 MB", url: "#" }
+                ],
+
+            "physics-3": [
+                { name: "NCERT Textbook - Gravitation", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/1WZn90oEJLRjEQv4SV3k66M-rCmJUfBTv/view?usp=drive_link" },
+                { name: "Gravitation - Revision Notes", type: "notes", size: "1.5 MB", url: "#" },
+                { name: "Exemplar Problems - Gravitation", type: "exemplar", size: "2.3 MB", url: "https://drive.google.com/file/d/1pZMlAtqFkUImgqXLpxlorRSworDDYe4N/view?usp=drive_link" },
+                { name: "PYQs - Gravitation", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Gravitation", type: "sample", size: "1.2 MB", url: "#" }
+                ],
+            
+            "physics-4": [
+                { name: "NCERT Textbook - Work, Energy & Power", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/120il6LChyIuXBfE8LB4eRS3ebjkr_W58/view?usp=drive_link" },
+                { name: "WEP - Revision Notes", type: "notes", size: "1.5 MB", url: "#" },
+                { name: "Exemplar Problems - WEP", type: "exemplar", size: "2.3 MB", url: "https://drive.google.com/file/d/11bvg11beILhIUNHzVV2_A2wJ2ZcQwaYm/view?usp=drive_link" },
+                { name: "PYQs - WEP", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - WEP", type: "sample", size: "1.2 MB", url: "#" }
+                ],
+
+
+            "physics-5": [
+                { name: "NCERT Textbook - Sound", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/1OSGB2Zcmq_1J3tn9-GgZWkGKnT1tX2kO/view?usp=drive_link" },
+                { name: "Sound - Revision Notes", type: "notes", size: "1.5 MB", url: "#" },
+                { name: "Exemplar Problems - Sound", type: "exemplar", size: "2.3 MB", url: "https://drive.google.com/file/d/14i7UFarGWsYj7cH_X2JAOGlrXn_f3IJh/view?usp=drive_link" },
+                { name: "PYQs - Sound", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Sound", type: "sample", size: "1.2 MB", url: "#" }
+                ],
+            // Chemistry resources
+            "chemistry-1": [
+                { name: "NCERT Textbook - Matter", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iesc101.pdf" },
+                { name: "Matter - Concise Notes", type: "notes", size: "1.2 MB", url: "#" },
+                { name: "Exemplar Problems - Matter", type: "exemplar", size: "2.7 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep101.pdf" },
+                { name: "PYQs - Matter", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Matter", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "chemistry-2": [
+                { name: "NCERT Textbook - Is Matter", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iesc102.pdf" },
+                { name: "Is Matter - Concise Notes", type: "notes", size: "1.2 MB", url: "#" },
+                { name: "Exemplar Problems - Is Matter", type: "exemplar", size: "2.7 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep102.pdf" },
+                { name: "PYQs - Is Matter", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Is Matter", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "chemistry-3": [
+                { name: "NCERT Textbook - Atoms & Molecules", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iesc103.pdf" },
+                { name: "Atoms and molecules - Concise Notes", type: "notes", size: "1.2 MB", url: "#" },
+                { name: "Exemplar Problems - Atoms and Molecules", type: "exemplar", size: "2.7 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep103.pdf" },
+                { name: "PYQs - Atoms & Molecules", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Atoms & Molecules", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "chemistry-4": [
+                { name: "NCERT Textbook - Atomic structurer", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iesc104.pdf" },
+                { name: "Atomic Structure - Concise Notes", type: "notes", size: "1.2 MB", url: "#" },
+                { name: "Exemplar Problems - Atomic Structure", type: "exemplar", size: "2.7 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep104.pdf" },
+                { name: "PYQs - Atomic Structure", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Atomic Structure", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            // Biology resources
+            "biology-1": [
+                { name: "NCERT Textbook - Cell", type: "textbook", size: "5.1 MB", url: "https://ncert.nic.in/textbook/pdf/iesc105.pdf" },
+                { name: "Cell Biology - Detailed Notes", type: "notes", size: "2.3 MB", url: "#" },
+                { name: "Exemplar Problems - Cell", type: "exemplar", size: "3.2 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep105.pdf" },
+                { name: "PYQs - Cell", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Cell", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+             "biology-2": [
+                { name: "NCERT Textbook - Tissues", type: "textbook", size: "5.1 MB", url: "https://ncert.nic.in/textbook/pdf/iesc106.pdf" },
+                { name: "Tissues - Detailed Notes", type: "notes", size: "2.3 MB", url: "#" },
+                { name: "Exemplar Problems - Cell", type: "exemplar", size: "3.2 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep106.pdf" },
+                { name: "PYQs - Tissues", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Tissues", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+             "biology-3": [
+                { name: "NCERT Textbook - Improvement in Food Resources", type: "textbook", size: "5.1 MB", url: "https://ncert.nic.in/textbook/pdf/iesc112.pdf" },
+                { name: "Improvement in Food Resources - Detailed Notes", type: "notes", size: "2.3 MB", url: "#" },
+                { name: "Exemplar Problems - Improvement in Food Resources", type: "exemplar", size: "3.2 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/science/ieep115.pdf" },
+                { name: "PYQs - Improvement in Food Resources", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Improvement in Food Resources", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            // Mathematics resources
+            "mathematics-1": [
+                { name: "NCERT Textbook - Number System", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh101.pdf" },
+                { name: "Number System - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/19TUU1hjAc74FfJ5bmy_B6ABjXYQ-14Wm/view?usp=drive_link" },
+                { name: "Exemplar Problems - Number System", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep201.pdf" },
+                { name: "PYQs - Number System", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Number System", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-2": [
+                { name: "NCERT Textbook - Polynomials", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh102.pdf" },
+                { name: "polynomials - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1jfYcet5Kdp4N2DiMVvtUS7hSr1oSn2ZM/view?usp=drive_link" },
+                { name: "Exemplar Problems - Polynomials", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep202.pdf" },
+                { name: "PYQs - Polynomials", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Polynomials", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-3": [
+                { name: "NCERT Textbook - Cooridnate Geometry", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh103.pdf" },
+                { name: "Coordinate Geometry - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/10OXaU-A0V6vFvblqAfGh2Pj3ZCTRzvZo/view?usp=drive_link" },
+                { name: "Exemplar Problems - Coordinate Geometry", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep203.pdf" },
+                { name: "PYQs - Coordinate Geometry", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Coordinate Geometry", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-4": [
+                { name: "NCERT Textbook - Linear Equations in 2 Variables", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh104.pdf" },
+                { name: "Linear Equation in 2 Variables - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1cz7SIC1C16OYH8DYUo8iryRBDNSS86MA/view?usp=drive_link" },
+                { name: "Exemplar Problems - Linear Equations in 2 Variables", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep204.pdf" },
+                { name: "PYQs - Linear Equation in 2 Variables", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Linear Equation in 2 Variables", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-5": [
+                { name: "NCERT Textbook - Euclid's Geometry", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh105.pdf" },
+                { name: "Euclid's Geometry - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/192a8wmnCJiEORz0B_VSgupxOVbOM2Lco/view?usp=drive_link" },
+                { name: "Exemplar Problems - Euclid's Geometry", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep205.pdf" },
+                { name: "PYQs - Euclid's Geometry", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Euclid's Geometry", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-6": [
+                { name: "NCERT Textbook - Lines and Angles", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh106.pdf" },
+                { name: "Lines and Angles - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1kb0SZM9jmyqTCR6yjrSHgbtjfkFA9Ssm/view?usp=drive_link" },
+                { name: "Exemplar Problems - Lines and Angles", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep206.pdf" },
+                { name: "PYQs - Lines and Angles", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Lines and Angles", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-7": [
+                { name: "NCERT Textbook - Triangles", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh107.pdf" },
+                { name: "Triangles - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1QTfSvIVTJsf2j-fj42_jPRMqbirNzn97/view?usp=drive_link" },
+                { name: "Exemplar Problems - Triangles", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep207.pdf" },
+                { name: "PYQs - Triangles", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Triangles", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-8": [
+                { name: "NCERT Textbook - Quadrilaterals", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh108.pdf" },
+                { name: "Quadrilaterals - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1ZASD8kz-Y7uAq23ZZM9hgca7wEMWZFa6/view?usp=drive_link" },
+                { name: "Exemplar Problems - Quadrilaterals", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep208.pdf" },
+                { name: "PYQs - Quadrilaterals", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Quadrilaterals", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-9": [
+                { name: "NCERT Textbook - Circles", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh109.pdf" },
+                { name: "Circles - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/15AliVyOywrif3Xej3FOENe9bzMr52-NR/view?usp=drive_link" },
+                { name: "Exemplar Problems - Circles", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep210.pdf" },
+                { name: "PYQs - Circles", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Circles", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-10": [
+                { name: "NCERT Textbook - Heron's Formula", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh110.pdf" },
+                { name: "Heron's Formula - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1EvYFUDs78crmyK-iH8tY6Pe69RF38RA9/view?usp=drive_link" },
+                { name: "Exemplar Problems - Heron's Formula", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep212.pdf" },
+                { name: "PYQs - Heron's Formula", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Heron's Formula", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-11": [
+                { name: "NCERT Textbook - Surface Area & Volume", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh111.pdf" },
+                { name: "Surface Area & Volume - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1DXpJWozM7KuYjWQO-qDJzfygs_hD8aY2/view?usp=drive_link" },
+                { name: "Exemplar Problems - Surface Area & Volume", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep213.pdf" },
+                { name: "PYQs - Surface Area and Volume", type: "pyq", size: "3.5 MB", url: "#" },
+                { name: "Sample Paper - Surface and Volume", type: "sample", size: "1.2 MB", url: "#" }
+            ],
+            "mathematics-12": [
+                { name: "NCERT Textbook - Statistics", type: "textbook", size: "3.8 MB", url: "https://ncert.nic.in/textbook/pdf/iemh112.pdf" },
+                { name: " Statistics - Formula Sheet", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/1GTeLHbTEvrmvQXw7sUZBChuNMlObcgpQ/view?usp=drive_link" },
+                { name: "Exemplar Problems -  Statistics", type: "exemplar", size: "2.4 MB", url: "https://ncert.nic.in/pdf/publication/exemplarproblem/classIX/mathematics/ieep214.pdf" },
+            ],
+
+           
+            // English resources
+    
+    // Grammar resources
+    "grammar-1": [
+        { name: "Tenses - Complete Guide", type: "textbook", size: "3.2 MB", url: "https://drive.google.com/file/d/GRAMMAR_TENSES_ID/preview" },
+        { name: "Tenses - Practice Exercises", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/GRAMMAR_TENSES_PRACTICE_ID/preview" }
+    ],
+    "grammar-2": [
+        { name: "Subject-Verb Agreement Rules", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "SV Agreement - Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+     "grammar-3": [
+        { name: "Modals", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "Modals- Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+     "grammar-4": [
+        { name: "Determiners", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "Determiners - Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+     "grammar-5": [
+        { name: "Direct and Indirect Speech", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "Direct and Indirect Speech - Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+    "grammar-6": [
+        { name: "Diary Entry Format & Examples", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_WRITING_ID/preview" },
+        { name: "Diary Entry - questions", type: "notes", size: "1.3 MB", url: "https://drive.google.com/file/d/GRAMMAR_DESCRIPTIVE_ID/preview" }
+    ],
+     "grammar-7": [
+        { name: "Descriptive Paragraph - Format and Examples", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "Descriptive Paragraph - Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+     "grammar-8": [
+        { name: "Story Writing - Format and Examples", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_ID/preview" },
+        { name: "Story writing  - Worksheets", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/GRAMMAR_SV_WORKSHEET_ID/preview" }
+    ],
+
+
+    
+    // Beehive resources
+    "beehive-1": [
+        { name: "The Fun They Had - Textbook", type: "textbook", size: "2.5 MB", url: "#" },
+        { name: "Chapter 1 - Summary & Analysis", type: "notes", size: "0.9 MB", url: "https://drive.google.com/file/d/12a5ycFvBSh2ukfMoAIb4k3VvCAdXFu-D/view?usp=drive_link" }
+    ],
+    "beehive-2": [
+        { name: "The Road Not Taken - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 2 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-3": [
+        {name: "The Sound of Music - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 3 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-4": [
+        {name: "Wind - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 4 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-5": [
+        {name: "The Little Girl - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 5 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-6": [
+        {name: "Rain on the Roof - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 6 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-7": [
+        {name: "A Truly Beautiful Mind - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 7 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-8": [
+        {name: "The Lake Isle of Innisfree - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 8 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-9": [
+        {name: "The Snake and The Mirror - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 9 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-10": [
+        {name: "The Legend of The Northland - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 10 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-11": [
+        {name: "My Childhood - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 11 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-12": [
+        {name: "No Men are Foregin - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 12 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-13": [
+        {name: "Reach for the Top - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 13 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-14": [
+        {name: "On Killing a Tree - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 14 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-15": [
+        {name: "Kathmandu - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 15 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-16": [
+        {name: "A Slumber Did My Spirit Seal - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 16 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+    "beehive-17": [
+        {name: "If I Were You - Textbook", type: "textbook", size: "2.7 MB", url: "#" },
+        { name: "Chapter 17 - Question Answers", type: "notes", size: "1.2 MB", url: "#" }
+    ],
+
+
+
+
+    // Moments resources  
+    "moments-1": [
+        { name: "The Lost Child - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 1 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+
+    "moments-2": [
+        { name: "The Adventures of Toto - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 2 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-3": [
+        { name: "Iswaran the Storyteller - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 3 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-4": [
+        { name: "In the Kingdom of Fools - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 4 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-5": [
+        { name: "The Happy Prince - Textbook", type: "textbook", size: "2.6 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER5_ID/preview" },
+        { name: "Chapter 5 - Character Analysis", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER5_ANALYSIS_ID/preview" }
+    ],
+    "moments-6": [
+        { name: "Weathering the Storm Ersama - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 6 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-7": [
+        { name: "The Last Leaf - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 7 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-8": [
+        { name: "A House is not a Home - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 8 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "moments-9": [
+        { name: "The Beggar - Textbook", type: "textbook", size: "2.3 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_ID/preview" },
+        { name: "Chapter 9 - Summary & Themes", type: "notes", size: "0.8 MB", url: "https://drive.google.com/file/d/MOMENTS_CHAPTER1_NOTES_ID/preview" }
+    ],
+
+
+    //history resources
+    "history-1": [
+        { name: "French Revolution - Textbook", type: "textbook", size: "4.2 MB", url: "https://ncert.nic.in/textbook/pdf/iess301.pdf" },
+        { name: "French Revolution - Notes", type: "notes", size: "1.8 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_2/preview" }
+    ],
+    "history-2": [
+        { name: "Socialism in Europe - Textbook", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_3/preview" },
+        { name: "French Revolution - Notes", type: "notes", size: "1.8 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_2/preview" }
+    ],
+
+    "history-3": [
+        { name: "Nazism and The Rise of Hitler - Textbook", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_3/preview" },
+        { name: "Nazism and The Rise of Hitler - Notes", type: "notes", size: "1.8 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_2/preview" }
+    ],
+
+    "history-4": [
+        { name: "Forest Society and Colonalism - Textbook", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_3/preview" },
+        { name: "Forest Society and Colonalism - Notes", type: "notes", size: "1.8 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_2/preview" }
+    ],
+
+    "history-5": [
+        { name: "Pastoralists in the Modern World - Textbook", type: "textbook", size: "3.9 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_3/preview" },
+        { name: "Pastoralists in the Modern World - Notes", type: "notes", size: "1.8 MB", url: "https://drive.google.com/file/d/HISTORY_FILE_ID_2/preview" }
+    ],
+    
+    // Political Science resources
+    "political-1": [
+        { name: "What is Democracy - Textbook", type: "textbook", size: "4.1 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_1/preview" },
+        { name: "Democracy Concepts - Notes", type: "notes", size: "1.5 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_2/preview" }
+    ],
+
+    "political-2": [
+        { name: "Constitutional Design - Textbook", type: "textbook", size: "4.1 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_1/preview" },
+        { name: "Constitutional Design - Notes", type: "notes", size: "1.5 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_2/preview" }
+    ],
+
+    "political-3": [
+        { name: "Electoral Politics - Textbook", type: "textbook", size: "4.1 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_1/preview" },
+        { name: "Electoral Politics - Notes", type: "notes", size: "1.5 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_2/preview" }
+    ],
+
+    "political-4": [
+        { name: "Working of Institutions - Textbook", type: "textbook", size: "4.1 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_1/preview" },
+        { name: "Working of Institutions - Notes", type: "notes", size: "1.5 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_2/preview" }
+    ],
+
+    "political-5": [
+        { name: "Democratic Rights - Textbook", type: "textbook", size: "4.1 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_1/preview" },
+        { name: "Democratic Rights - Notes", type: "notes", size: "1.5 MB", url: "https://drive.google.com/file/d/POLITICAL_FILE_ID_2/preview" }
+    ],
+    
+    // Geography resources
+    "geography-1": [
+        { name: "India Size Location - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess101.pdf" },
+        { name: "India Geography - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/1JLExCHgy-HIun2XIndW0DX0E9fGm10QW/view?usp=drive_link" }
+    ],
+     "geography-2": [
+        { name: "Physical Features of India - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess102.pdf" },
+        { name: "Physical Features of India - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/1kS6aR5zySk5DvLInLrVSluc2C5vy_pZa/view?usp=drive_link" }
+    ],
+     "geography-3": [
+        { name: "Drainage - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess103.pdf" },
+        { name: "Drainage - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/17HadAxf5q-wSW0Il21EvDKM5XqFC_iM1/view?usp=drive_link" }
+    ],
+     "geography-4": [
+        { name: "Climate - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess104.pdf" },
+        { name: "Climate - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/1Iqn2H88g1cigYYga7EWLdTryEe8E2eVZ/view?usp=drive_link" }
+    ],
+     "geography-5": [
+        { name: "Vegetation & Wildlife - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess105.pdf" },
+        { name: "Vegetation & Wildlife - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/1qaTwqAf5r0RNClZvtOZjF8w5d_tBlJcK/view?usp=drive_link" }
+    ],
+     "geography-6": [
+        { name: "Population - Textbook", type: "textbook", size: "4.5 MB", url: "https://ncert.nic.in/textbook/pdf/iess106.pdf" },
+        { name: "Population - Notes", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/1sDKoSVY1Hcl7YcsVXPO54nSc6WwQBO41/view?usp=drive_link" }
+    ],
+    
+    // Economics resources
+    "economics-1": [
+        { name: "Village Palampur - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_1/preview" },
+        { name: "Economics Basics - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_2/preview" }
+    ],
+    
+    "economics-2": [
+        { name: "People as a Resource - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_1/preview" },
+        { name: "Economics Basics - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_2/preview" }
+    ],
+    
+    "economics-3": [
+        { name: "Poverty as a Challenge - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_1/preview" },
+        { name: "Economics Basics - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_2/preview" }
+    ],
+    
+    "economics-4": [
+        { name: "Food Security in India - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_1/preview" },
+        { name: "Economics Basics - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/ECONOMICS_FILE_ID_2/preview" }
+    ],
+       
+            
+         // "hindi-grammar": {
+        // name: "हिंदी व्याकरण",
+        //chapters: [
+            //  { number: 1, name: "उपसर्ग और प्रत्यय" },
+            //{ number: 2, name: "समास " },
+            //{ number: 3, name: "अर्थ के आधार पर वाक्य भेद" },
+            //{ number: 4, name: "अलंकार" },
+            //{ number: 5, name: "लेखन कौशल " },
+        //]
+
+    // Hindi  Grammar resources
+    "hindi-grammar-1": [
+        { name: "उपसर्ग और प्रत्यय - पूर्ण गाइड", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_ID/preview" },
+        { name: "उपसर्ग और प्रत्यय अभ्यास", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_PRACTICE_ID/preview" }
+    ],
+    "hindi-grammar-2": [
+        { name: "समास - पूर्ण गाइड", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_ID/preview" },
+        { name: "समास अभ्यास", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_PRACTICE_ID/preview" }
+    ],
+    "hindi-grammar-3": [
+        { name: "अर्थ के आधार पर वाक्य भेद - पूर्ण गाइड", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_ID/preview" },
+        { name: "अर्थ के आधार पर वाक्य भेद अभ्यास", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_PRACTICE_ID/preview" }
+    ],
+    "hindi-grammar-4": [
+        { name: "अलंकार - पूर्ण गाइड", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_ID/preview" },
+        { name: "अलंकार अभ्यास", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/HINDI_GRAMMAR_1_PRACTICE_ID/preview" }
+    ],
+    "hindi-grammar-5": [
+        { name: "लेखन कौशल", type: "notes", size: "1.3 MB", url: "https://drive.google.com/file/d/HINDI_WRITING_ID/preview" },
+        { name: "लेखन कौशल के नमूने", type: "notes", size: "1.0 MB", url: "https://drive.google.com/file/d/HINDI_LETTER_WRITING_ID/preview" }
+    ],
+    
+
+    // Kshitij resources
+    "kshitij-1": [
+        { name: "दो बैलों की कथा - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 1 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-2": [
+        { name: "ल्हासा की ओर - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 2 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-3": [
+        { name: "उपभोक्तावाद की संस्कृति - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 3 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-4": [
+        { name: "साँवले सपनों की याद - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 4 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-5": [
+        { name: "प्रेमचंद के फटे जूते - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 5 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-6": [
+        { name: "मेरे बचपन के दिन - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 6 - सारांश और प्रश्नोत्तर", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-7": [
+        { name: "साखियाँ एवं सबद - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 7 - सारांश और विश्लेषण", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-8": [
+        { name: "वाख - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 8 - सारांश और विश्लेषण", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+     "kshitij-9": [
+        { name: "सवैये - पाठ्यपुस्तक", type: "textbook", size: "3.1 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_ID/preview" },
+        { name: "पाठ 9 - सारांश और विश्लेषण", type: "notes", size: "1.2 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "kshitij-10": [
+        { name: "कैदी और कोकिला - पाठ्यपुस्तक", type: "textbook", size: "2.9 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ID/preview" },
+        { name: "पाठ 10 - सारांश और विश्लेषण", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ANALYSIS_ID/preview" }
+    ],
+    "kshitij-11": [
+        { name: "ग्राम श्री - पाठ्यपुस्तक", type: "textbook", size: "2.9 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ID/preview" },
+        { name: "पाठ 11 - सारांश और विश्लेषण", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ANALYSIS_ID/preview" }
+    ],
+    "kshitij-12": [
+        { name: "मेघ आए - पाठ्यपुस्तक", type: "textbook", size: "2.9 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ID/preview" },
+        { name: "पाठ 12 - सारांश और विश्लेषण", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ANALYSIS_ID/preview" }
+    ],
+    "kshitij-13": [
+        { name: "बच्चे काम पर जा रहे हैं - पाठ्यपुस्तक", type: "textbook", size: "2.9 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ID/preview" },
+        { name: "पाठ 13 - सारांश और विश्लेषण", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/KSHITIJ_CHAPTER9_ANALYSIS_ID/preview" }
+    ],
+    
+    // Kritika resources  
+    "kritika-1": [
+        { name: "इस जल प्रलय में - पाठ्यपुस्तक", type: "textbook", size: "2.7 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER1_ID/preview" },
+        { name: "पाठ 1 - सारांश और विषय", type: "notes", size: "1.0 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "kritika-3": [
+        { name: "मेरे संग की औरतें - पाठ्यपुस्तक", type: "textbook", size: "2.7 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER1_ID/preview" },
+        { name: "पाठ 2 - सारांश और विषय", type: "notes", size: "1.0 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER1_NOTES_ID/preview" }
+    ],
+    "kritika-3": [
+        { name: "रीढ़ की हड्डी - पाठ्यपुस्तक", type: "textbook", size: "2.8 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER3_ID/preview" },
+        { name: "पात्र विश्लेषण", type: "notes", size: "1.1 MB", url: "https://drive.google.com/file/d/KRITIKA_CHAPTER3_ANALYSIS_ID/preview" }
+    ],
+
+// IT Part A resources (simple subject-chapter format)
+    "it-parta-1": [
+        { name: "Communication Skills - Textbook", type: "textbook", size: "3.2 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_ID/preview" },
+        { name: "Communication Skills - Notes", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_NOTES_ID/preview" }
+    ],
+    "it-parta-2": [
+        { name: "Self Management - Textbook", type: "textbook", size: "3.2 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_ID/preview" },
+        { name: "Self Management - Notes", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_NOTES_ID/preview" }
+    ],
+    "it-parta-3": [
+        { name: "Basic ICT Skills - Textbook", type: "textbook", size: "3.5 MB", url: "https://drive.google.com/file/d/IT_PART_A_3_ID/preview" },
+        { name: "ICT Skills - Practical Guide", type: "notes", size: "2.1 MB", url: "https://drive.google.com/file/d/IT_PART_A_3_GUIDE_ID/preview" }
+    ],
+    "it-parta-4": [
+        { name: "Entrepreneurial Skills - Textbook", type: "textbook", size: "3.2 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_ID/preview" },
+        { name: "Entrepreneurial Skills - Notes", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_NOTES_ID/preview" }
+    ],
+    "it-parta-5": [
+        { name: "Green Skills - Textbook", type: "textbook", size: "3.2 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_ID/preview" },
+        { name: "Green Skills - Notes", type: "notes", size: "1.4 MB", url: "https://drive.google.com/file/d/IT_PART_A_1_NOTES_ID/preview" }
+    ],
+    // IT Part B resources (simple subject-chapter format)
+    "it-partb-1": [
+        { name: "IT-ITeS Industry - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/IT_PART_B_1_ID/preview" },
+        { name: "Industry Overview - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/IT_PART_B_1_NOTES_ID/preview" }
+    ],
+    "it-partb-2": [
+        { name: "Data Entry and Keyboarding Skills - Textbook", type: "textbook", size: "3.8 MB", url: "https://drive.google.com/file/d/IT_PART_B_1_ID/preview" },
+        { name: "Data Entry and Keyboarding Skills - Notes", type: "notes", size: "1.7 MB", url: "https://drive.google.com/file/d/IT_PART_B_1_NOTES_ID/preview" }
+    ],
+    "it-partb-3": [
+        { name: "Digital Documentation - Textbook", type: "textbook", size: "4.2 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_ID/preview" },
+        { name: "Digital Documentation", type: "notes", size: "2.3 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_EXERCISES_ID/preview" }
+    ],
+    "it-partb-4": [
+        { name: "Electronic Spreadsheet - Textbook", type: "textbook", size: "4.2 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_ID/preview" },
+        { name: " Electronic Spreadsheet ", type: "notes", size: "2.3 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_EXERCISES_ID/preview" }
+    ],
+    "it-partb-5": [
+        { name: "Digital Presentation - Textbook", type: "textbook", size: "4.2 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_ID/preview" },
+        { name: "Digital Presentation", type: "notes", size: "2.3 MB", url: "https://drive.google.com/file/d/IT_PART_B_4_EXERCISES_ID/preview" }
+    ],
+
+
+        };
+
+        // Chapters Modal
+        const chaptersModal = document.getElementById('chaptersModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        const chaptersGrid = document.querySelector('.chapters-grid');
+        
+        // Open modal when subject card is clicked
+        subjectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const subject = card.getAttribute('data-subject');
+                
+                if (subjectsData[subject]) {
+                    const subjectData = subjectsData[subject];
+                    
+                    // Update modal title
+                    document.querySelector('.modal-title').textContent = `${subjectData.name} Chapters`;
+                    
+                    // Clear previous chapters
+                    chaptersGrid.innerHTML = '';
+                    
+                    // Add chapters to modal
+                    subjectData.chapters.forEach(chapter => {
+                        const chapterCard = document.createElement('div');
+                        chapterCard.className = 'chapter-card';
+                        chapterCard.setAttribute('data-subject', subject);
+                        chapterCard.setAttribute('data-chapter', chapter.number);
+                        chapterCard.innerHTML = `
+                            <div class="chapter-number">${subject === 'english' ? 'Section' : 'Chapter'} ${chapter.number}</div>
+                            <div class="chapter-name">${chapter.name}</div>
+                        `;
+                        chaptersGrid.appendChild(chapterCard);
+                    });
+                    
+                    // Show modal
+                    chaptersModal.classList.add('active');
+                } else {
+                    alert('Content for this subject is coming soon!');
+                }
+            });
+        });
+
+        
+
+
+        // Resources Modal
+        const resourcesModal = document.getElementById('resourcesModal');
+        const resourcesTitle = document.getElementById('resourcesTitle');
+        const resourcesList = document.querySelector('.resources-list');
+        const resourceTypeButtons = document.querySelectorAll('.resource-type-btn');
+        
+        // Open resources modal when chapter is clicked
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.chapter-card')) {
+                const chapterCard = e.target.closest('.chapter-card');
+                const subject = chapterCard.getAttribute('data-subject');
+                const chapterNum = chapterCard.getAttribute('data-chapter');
+                const chapterName = chapterCard.querySelector('.chapter-name').textContent;
+                
+                const resourceKey = `${subject}-${chapterNum}`;
+                
+                // Update modal title
+                resourcesTitle.textContent = `${subjectsData[subject].name} - ${chapterName}`;
+                
+                // Show resources for this chapter
+                showResources(resourceKey);
+                
+                // Close chapters modal and open resources modal
+                chaptersModal.classList.remove('active');
+                setTimeout(() => {
+                    resourcesModal.classList.add('active');
+                }, 300);
+            }
+        });
+
+          // Enhanced search functionality
+function initEnhancedSearch() {
+    const searchContainer = document.querySelector('.search-container');
+    const searchInput = document.querySelector('.search-input');
+    
+    // Add search icon animation
+    const searchIcon = searchContainer.querySelector('.fa-search');
+    searchIcon.style.transition = 'all 0.3s ease';
+    
+    // Enhanced search container styling
+    searchContainer.style.position = 'relative';
+    
+    // Create suggestions container
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.id = 'searchSuggestions';
+    suggestionsContainer.style.cssText = `
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--dark-card);
+        border: 1px solid var(--primary);
+        border-top: none;
+        border-radius: 0 0 15px 15px;
+        z-index: 1000;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    `;
+    
+    searchContainer.appendChild(suggestionsContainer);
+    
+    // Build search index
+    const searchIndex = buildSearchIndex();
+    
+    // Enhanced input handler with debouncing
+    let searchTimeout;
+    searchInput.addEventListener('input', function(e) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const query = e.target.value.trim().toLowerCase();
+            
+            if (query.length < 2) {
+                suggestionsContainer.style.display = 'none';
+                searchIcon.style.transform = 'scale(1)';
+                return;
+            }
+            
+            // Animate search icon
+            searchIcon.style.transform = 'scale(1.1)';
+            searchIcon.style.color = 'var(--secondary)';
+            
+            const results = performSearch(query, searchIndex);
+            displaySearchResults(results, query);
+            
+            if (results.length > 0) {
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        }, 300);
+    });
+    
+    // Focus/blur effects
+    searchInput.addEventListener('focus', function() {
+        searchContainer.style.boxShadow = 'var(--glow)';
+        searchContainer.style.borderColor = 'var(--primary)';
+    });
+    
+    searchInput.addEventListener('blur', function() {
+        setTimeout(() => {
+            searchContainer.style.boxShadow = 'none';
+            suggestionsContainer.style.display = 'none';
+            searchIcon.style.transform = 'scale(1)';
+            searchIcon.style.color = 'var(--primary)';
+        }, 200);
+    });
+    
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const firstSuggestion = suggestionsContainer.querySelector('.suggestion-item');
+            if (firstSuggestion) firstSuggestion.focus();
+        }
+    });
+}
+
+function buildSearchIndex() {
+    const index = [];
+    
+    // Index subjects and chapters
+    Object.keys(subjectsData).forEach(subjectKey => {
+        const subject = subjectsData[subjectKey];
+        index.push({
+            type: 'subject',
+            name: subject.name,
+            key: subjectKey,
+            searchText: subject.name.toLowerCase() + ' ' + subjectKey
+        });
+        
+        // Index chapters
+        if (subject.chapters) {
+            subject.chapters.forEach(chapter => {
+                index.push({
+                    type: 'chapter',
+                    name: chapter.name,
+                    subject: subject.name,
+                    subjectKey: subjectKey,
+                    chapterNumber: chapter.number,
+                    searchText: chapter.name.toLowerCase() + ' ' + subject.name.toLowerCase()
+                });
+            });
+        }
+    });
+    
+    // Index resources
+    Object.keys(resourcesData).forEach(key => {
+        resourcesData[key].forEach(resource => {
+            index.push({
+                type: 'resource',
+                name: resource.name,
+                resourceType: resource.type,
+                searchText: resource.name.toLowerCase() + ' ' + resource.type
+            });
+        });
+    });
+    
+    return index;
+}
+
+function performSearch(query, index) {
+    return index.filter(item => {
+        const score = calculateRelevanceScore(item.searchText, query);
+        item.score = score;
+        return score > 0.3; // Threshold for relevance
+    }).sort((a, b) => b.score - a.score).slice(0, 8); // Top 8 results
+}
+
+function calculateRelevanceScore(text, query) {
+    if (text.includes(query)) return 1.0;
+    
+    const words = query.split(' ');
+    let score = 0;
+    words.forEach(word => {
+        if (text.includes(word)) score += 0.3;
+    });
+    
+    return score / words.length;
+}
+
+function displaySearchResults(results, query) {
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    suggestionsContainer.innerHTML = '';
+    
+    if (results.length === 0) {
+        suggestionsContainer.innerHTML = `
+            <div style="padding: 20px; text-align: center; opacity: 0.7;">
+                <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <div>No results found for "${query}"</div>
+            </div>
+        `;
+        return;
+    }
+    
+    // Group results by type
+    const groupedResults = {
+        subject: [],
+        chapter: [],
+        resource: []
+    };
+    
+    results.forEach(result => {
+        groupedResults[result.type].push(result);
+    });
+    
+    // Display results in order
+    ['subject', 'chapter', 'resource'].forEach(type => {
+        if (groupedResults[type].length > 0) {
+            const sectionHeader = document.createElement('div');
+            sectionHeader.style.cssText = `
+                padding: 10px 15px;
+                background: rgba(108, 99, 255, 0.1);
+                font-weight: bold;
+                font-size: 0.9rem;
+                color: var(--primary);
+                border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            `;
+            sectionHeader.textContent = type.charAt(0).toUpperCase() + type.slice(1) + 's';
+            suggestionsContainer.appendChild(sectionHeader);
+            
+            groupedResults[type].forEach(result => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item';
+                suggestionItem.tabIndex = 0;
+                suggestionItem.style.cssText = `
+                    padding: 12px 15px;
+                    cursor: pointer;
+                    border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                `;
+                
+                // Add appropriate icon
+                let icon = 'fas fa-book';
+                if (result.type === 'subject') icon = 'fas fa-atom';
+                if (result.type === 'resource') icon = 'fas fa-file-pdf';
+                if (result.resourceType === 'notes') icon = 'fas fa-sticky-note';
+                
+                suggestionItem.innerHTML = `
+                    <i class="${icon}" style="color: var(--primary);"></i>
+                    <div>
+                        <div style="font-weight: 500;">${result.name}</div>
+                        ${result.subject ? `<div style="font-size: 0.8rem; opacity: 0.7;">${result.subject}</div>` : ''}
+                    </div>
+                `;
+                
+                suggestionItem.addEventListener('click', () => {
+                    handleSearchResultClick(result);
+                    suggestionsContainer.style.display = 'none';
+                    searchInput.value = '';
+                });
+                
+                suggestionItem.addEventListener('mouseenter', () => {
+                    suggestionItem.style.background = 'rgba(108, 99, 255, 0.1)';
+                });
+                
+                suggestionItem.addEventListener('mouseleave', () => {
+                    suggestionItem.style.background = 'transparent';
+                });
+                
+                // Keyboard support
+                suggestionItem.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        handleSearchResultClick(result);
+                        suggestionsContainer.style.display = 'none';
+                        searchInput.value = '';
+                    }
+                });
+                
+                suggestionsContainer.appendChild(suggestionItem);
+            });
+        }
+    });
+}
+
+function handleSearchResultClick(result) {
+    switch (result.type) {
+        case 'subject':
+            // Simulate clicking the subject card
+            const subjectCard = document.querySelector(`[data-subject="${result.key}"]`);
+            if (subjectCard) subjectCard.click();
+            break;
+            
+        case 'chapter':
+            // Navigate to the chapter
+            const subjectCardForChapter = document.querySelector(`[data-subject="${result.subjectKey}"]`);
+            if (subjectCardForChapter) {
+                subjectCardForChapter.click();
+                // The chapter modal will open, then we need to simulate chapter click
+                setTimeout(() => {
+                    const chapterCard = document.querySelector(`[data-chapter="${result.chapterNumber}"]`);
+                    if (chapterCard) chapterCard.click();
+                }, 500);
+            }
+            break;
+            
+        case 'resource':
+            // Open the resource directly
+            openPDFViewer(result.name, '#');
+            break;
+    }
+}
+
+// Initialize enhanced search
+initEnhancedSearch();
+
+
+        // Function to show resources
+        function showResources(resourceKey) {
+            // Clear previous resources
+            resourcesList.innerHTML = '';
+            
+            // Get resources for this chapter
+            const resources = resourcesData[resourceKey] || [];
+            
+            if (resources.length === 0) {
+                resourcesList.innerHTML = '<p>No resources available for this chapter yet.</p>';
+                return;
+            }
+            
+            // Add resources to list
+            resources.forEach(resource => {
+                const resourceItem = document.createElement('div');
+                resourceItem.className = 'resource-item';
+                resourceItem.setAttribute('data-type', resource.type);
+                
+                // Get appropriate icon for resource type
+                let iconClass = 'fas fa-file';
+                if (resource.type === 'textbook') iconClass = 'fas fa-book';
+                else if (resource.type === 'notes') iconClass = 'fas fa-sticky-note';
+                else if (resource.type === 'exemplar') iconClass = 'fas fa-question-circle';
+                else if (resource.type === 'pyq') iconClass = 'fas fa-file-alt';
+                else if (resource.type === 'sample') iconClass = 'fas fa-clipboard-list';
+                
+                resourceItem.innerHTML = `
+                    <div class="resource-info">
+                        <i class="${iconClass} resource-icon-small"></i>
+                        <div>
+                            <div class="resource-name">${resource.name}</div>
+                            <div class="resource-size">${resource.size}</div>
+                        </div>
+                    </div>
+                    <button class="download-btn" data-url="${resource.url}">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                `;
+                resourcesList.appendChild(resourceItem);
+            });
+            
+            // Add event listeners to download buttons
+            document.querySelectorAll('.download-btn[data-url]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    // In a real implementation, this would download the file
+                    // For this demo, we'll simulate a download
+                    const resourceName = this.closest('.resource-item').querySelector('.resource-name').textContent;
+                    simulateDownload(resourceName);
+                });
+            });
+        }
+
+        // Resource type filtering
+        resourceTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const type = button.getAttribute('data-type');
+                
+                resourceTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const resourceItems = resourcesList.querySelectorAll('.resource-item');
+                
+                resourceItems.forEach(item => {
+                    if (type === 'all' || item.getAttribute('data-type') === type) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Close modals
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                chaptersModal.classList.remove('active');
+                resourcesModal.classList.remove('active');
+            });
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === chaptersModal) {
+                chaptersModal.classList.remove('active');
+            }
+            if (e.target === resourcesModal) {
+                resourcesModal.classList.remove('active');
+            }
+        });
+
+        // Enhanced featured resources with external links
+function enhanceFeaturedResources() {
+    const resourcesGrid = document.querySelector('.resources-grid');
+    
+    // Updated resources data with external links
+    const featuredResources = [
+        {
+            title: "NCERT Textbooks",
+            description: "Complete PDFs of all NCERT textbooks from official source",
+            icon: "fas fa-book",
+            count: "Official Source",
+            gradient: "linear-gradient(135deg, var(--primary), #8a85ff)",
+            link: "https://ncert.nic.in/textbook.php",
+            buttonText: "Visit NCERT Portal"
+        },
+        {
+            title: "Exemplar Problems",
+            description: "NCERT exemplar problems and solutions",
+            icon: "fas fa-question-circle",
+            count: "Solved Examples",
+            gradient: "linear-gradient(135deg, #ff6b6b, #ff8b8b)",
+            link: "https://ncert.nic.in/exemplar-problems.php",
+            buttonText: "View Exemplars"
+        },
+        {
+            title: "Sample Papers",
+            description: "Official CBSE sample papers and marking schemes",
+            icon: "fas fa-file-alt",
+            count: "Latest Papers",
+            gradient: "linear-gradient(135deg, #4CAF50, #66BB6A)",
+            link: "https://www.cbse.gov.in/curric~1/sqp_term1_sep11.htm",
+            buttonText: "Download Papers"
+        },
+        {
+            title: "Study Materials",
+            description: "Additional study resources and guides",
+            icon: "fas fa-graduation-cap",
+            count: "Extra Resources",
+            gradient: "linear-gradient(135deg, #FF9800, #FFB74D)",
+            link: "https://diksha.gov.in/cbse/",
+            buttonText: "Explore Diksha"
+        }
+    ];
+    
+    resourcesGrid.innerHTML = '';
+    
+    featuredResources.forEach((resource, index) => {
+        const resourceCard = document.createElement('div');
+        resourceCard.className = 'resource-card enhanced-resource-card';
+        resourceCard.style.animationDelay = `${index * 0.1}s`;
+        
+        resourceCard.innerHTML = `
+            <div class="resource-icon-container" style="background: ${resource.gradient}">
+                <i class="${resource.icon}"></i>
+            </div>
+            <h3 class="resource-title">${resource.title}</h3>
+            <p class="resource-desc">${resource.description}</p>
+            <div class="resource-count">${resource.count}</div>
+            <a href="${resource.link}" target="_blank" class="enhanced-download-btn" rel="noopener noreferrer">
+                <i class="fas fa-external-link-alt"></i>
+                <span>${resource.buttonText}</span>
+                <div class="btn-hover-effect"></div>
+            </a>
+        `;
+        
+        resourcesGrid.appendChild(resourceCard);
+    });
+    
+    // Add enhanced styles for links
+    const enhancedStyles = `
+        .enhanced-resource-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            background: linear-gradient(145deg, var(--dark-card), #1f1f35);
+        }
+        
+        .enhanced-resource-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+        
+        .resource-icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .enhanced-resource-card:hover .resource-icon-container {
+            transform: rotate(10deg) scale(1.1);
+        }
+        
+        .resource-count {
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        
+        .enhanced-download-btn {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .enhanced-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-hover-effect {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .enhanced-download-btn:hover .btn-hover-effect {
+            left: 100%;
+        }
+        
+        .enhanced-resource-card {
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = enhancedStyles;
+    document.head.appendChild(styleSheet);
+}
+
+// Initialize enhanced featured resources
+enhanceFeaturedResources();
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            // Filter subjects based on search term
+            subjectCards.forEach(card => {
+                const subjectName = card.querySelector('.subject-title').textContent.toLowerCase();
+                const subjectDesc = card.querySelector('.subject-desc').textContent.toLowerCase();
+                
+                if (subjectName.includes(searchTerm) || subjectDesc.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Change button text from "Download" to "View"
+function updateResourceButtons() {
+    document.querySelectorAll('.download-btn').forEach(btn => {
+        // Update button text
+        if (btn.innerHTML.includes('Download')) {
+            btn.innerHTML = btn.innerHTML.replace('Download', 'View');
+        }
+        
+        // Update icon from download to eye
+        if (btn.innerHTML.includes('fa-download')) {
+            btn.innerHTML = btn.innerHTML.replace('fa-download', 'fa-eye');
+        }
+    });
+}
+// Simple function to open PDF in new tab
+function viewPDF(resourceName, fileUrl) {
+    // Use Google Drive's preview mode
+    const previewUrl = fileUrl.includes('/preview') ? fileUrl : fileUrl.replace('/view', '/preview');
+    
+    window.open(previewUrl, '_blank', 'noopener,noreferrer');
+    
+    // Optional: Track PDF views
+    console.log(`PDF viewed: ${resourceName}`);
+}
+
+// Update all resource buttons
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.resource-item .download-btn')) {
+        const btn = e.target.closest('.download-btn');
+        const url = btn.getAttribute('data-url');
+        const resourceName = btn.closest('.resource-item').querySelector('.resource-name').textContent;
+        
+        viewPDF(resourceName, url);
+    }
+});
+
+// Update button texts
+document.querySelectorAll('.download-btn').forEach(btn => {
+    btn.innerHTML = '<i class="fas fa-eye"></i> View PDF';
+});
+
+// Call this function after loading resources
+updateResourceButtons();
+
+        // Replace the download function with PDF viewer
+function openPDFViewer(filename, fileUrl) {
+    // Open PDF in new tab
+    const newTab = window.open(fileUrl, '_blank');
+    
+    if (newTab) {
+        // Show opening notification
+        showNotification(`Opening: ${filename}`, 'info');
+    } else {
+        // If popup blocked, show alternative
+        showNotification('Popup blocked! Please allow popups for this site.', 'warning');
+        
+        // Alternative: Create a visible link
+        const altLink = document.createElement('a');
+        altLink.href = fileUrl;
+        altLink.target = '_blank';
+        altLink.style.display = 'none';
+        altLink.textContent = `Open ${filename}`;
+        document.body.appendChild(altLink);
+        altLink.click();
+        document.body.removeChild(altLink);
+    }
+}
+
+
+
+// Add this function to load Question Bank CSS on page load
+function loadQuestionBankCSS() {
+    const styles = `
+        /* Question Bank Card Styles */
+        .question-bank-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .question-bank-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .qb-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+        
+        .qb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8b8b);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .qb-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #6c63ff, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .qb-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+        
+        .qb-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .qb-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .qb-feature:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: rgba(108, 99, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .qb-feature i {
+            color: #6c63ff;
+            font-size: 1.2rem;
+            width: 24px;
+        }
+        
+        .qb-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .qb-stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .qb-stat:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: rgba(108, 99, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6c63ff, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        .qb-actions {
+            display: flex;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        
+        .qb-primary-btn {
+            background: linear-gradient(135deg, #6c63ff, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+        }
+        
+        .qb-primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(108, 99, 255, 0.4);
+        }
+        
+        .qb-secondary-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .qb-secondary-btn:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: rgba(108, 99, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, -10px) rotate(180deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .question-bank-card {
+                padding: 30px 20px;
+            }
+            
+            .qb-header h2 {
+                font-size: 2rem;
+            }
+            
+            .qb-actions {
+                flex-direction: column;
+            }
+            
+            .qb-primary-btn, .qb-secondary-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Question Bank Modal Styles */
+        .question-bank-modal {
+            max-width: 1000px;
+            max-height: 90vh;
+        }
+        
+        .qb-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background: rgba(108, 99, 255, 0.05);
+        }
+        
+        .qb-stat-card {
+            background: var(--dark-card);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+        
+        .qb-stat-card i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .qb-stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .qb-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .qb-controls {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .qb-search {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .qb-search input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            background: var(--dark-card);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 25px;
+            color: var(--dark-text);
+        }
+        
+        .qb-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+        
+        .qb-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .qb-filters select {
+            padding: 10px 15px;
+            background: var(--dark-card);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 8px;
+            color: var(--dark-text);
+            min-width: 150px;
+        }
+        
+        .qb-subjects-section {
+            padding: 20px;
+        }
+        
+        .qb-subjects-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .qb-subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .qb-subject-item {
+            background: var(--dark-card);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+        
+        .qb-subject-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subject-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .subject-info {
+            flex: 1;
+        }
+        
+        .subject-info h4 {
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .subject-info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .subject-arrow {
+            color: var(--primary);
+        }
+    `;
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = styles;
+    document.head.appendChild(styleSheet);
+}
+
+// Call this function immediately when the page loads
+loadQuestionBankCSS();
+
+// Question Bank Data with Google Drive Folder Links
+const questionBankLinks = {
+    physics: "https://drive.google.com/drive/folders/1k-FaaR2acS0VaeIcHWz0KMTRi2XVdTWe?usp=drive_link",
+    chemistry: "https://drive.google.com/drive/folders/1Mgyy0KqpSm3M4gpPVZ_lMITkoRGY0vRm?usp=drive_link", 
+    biology: "https://drive.google.com/drive/folders/1NHD5eJdIYOD9U8ogUyEKkUDEjMsiMCoD?usp=drive_link",
+    mathematics: "https://drive.google.com/drive/folders/1kktrYHeoNIG8Oau2VBb7Xj3pt6v2CnJi?usp=drive_link",
+    history: "https://drive.google.com/drive/folders/1InvLJIKMILJbCnwSAea0rwxH-hzOXZaO?usp=drive_link",
+    political: "https://drive.google.com/drive/folders/1pG9j-eS6yLwo3c_LooYzErJTTqh3kd0J?usp=drive_link",
+    geography: "https://drive.google.com/drive/folders/1ua9opiNqnkByhug23HF2uD3xu8vLB9s_?usp=drive_link",
+    economics: "https://drive.google.com/drive/folders/1QeA6I1pjqn9_1t1Q28-k4bt1VxPP3EOM?usp=drive_link",
+    "hindi-grammar": "https://drive.google.com/drive/folders/1ynAL5sxfDg2--ReJffzxQiPmSIW61IPk?usp=drive_link",
+    kshitij: "https://drive.google.com/drive/folders/1csq6NV_U_gY9la6uWG2KG01y9oA3Zak0?usp=drive_link",
+    kritika: "https://drive.google.com/drive/folders/1XWFKOoL862-OWRpNBN3c0qiKjlbCX3gj?usp=drive_link", 
+    grammar: "https://drive.google.com/drive/folders/1ZopqfL0bxEZJn69LZgSEvh-8OnANA4ZC?usp=drive_link",
+    beehive: "https://drive.google.com/drive/folders/1McIkMxYL-eC8-CmQ7wpxiwBkuWKtlewI?usp=drive_link",
+    moments: "https://drive.google.com/drive/folders/1E-tpb4dghdJQrifE-AZTflkDQKnel_AQ?usp=drive_link",
+    "it-parta": "https://drive.google.com/drive/folders/1H7dmophflR6IcyBoRQbL4yF9ETgEyECw?usp=drive_link",
+    "it-partb": "https://drive.google.com/drive/folders/1NM59WPgBV1PZoNGYxpyLxFJqbPlKMS7M?usp=drive_link"
+};
+
+// Question Bank HTML Section
+function addQuestionBankSection() {
+    const container = document.querySelector('.container');
+    
+    const questionBankSection = document.createElement('div');
+    questionBankSection.className = 'resources-section';
+    questionBankSection.innerHTML = `
+        <h1 class="section-title">Practice Center</h1>
+        <div class="question-bank-card">
+            <div class="qb-header">
+                <div class="qb-badge">
+                    <i class="fas fa-bolt"></i>
+                    NEW
+                </div>
+                <h2>Question Bank</h2>
+                <p>Your ultimate practice destination with 5,000+ questions across all subjects</p>
+            </div>
+            
+            <div class="qb-features">
+                <div class="qb-feature">
+                    <i class="fas fa-history"></i>
+                    <span>Previous Year Questions (2015-2025)</span>
+                </div>
+                <div class="qb-feature">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Chapter-wise Worksheets</span>
+                </div>
+                <div class="qb-feature">
+                    <i class="fas fa-tasks"></i>
+                    <span>MCQs & Practice Sets</span>
+                </div>
+                <div class="qb-feature">
+                    <i class="fas fa-filter"></i>
+                    <span>Advanced Filtering</span>
+                </div>
+            </div>
+            
+            <div class="qb-stats-grid">
+                <div class="qb-stat">
+                    <div class="stat-number">5K+</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="qb-stat">
+                    <div class="stat-number">16</div>
+                    <div class="stat-label">Subjects</div>
+                </div>
+                <div class="qb-stat">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Worksheets</div>
+                </div>
+                <div class="qb-stat">
+                    <div class="stat-number">9</div>
+                    <div class="stat-label">Years</div>
+                </div>
+            </div>
+            
+            <div class="qb-actions">
+                <button class="qb-primary-btn" onclick="openQuestionBank()">
+                    <i class="fas fa-rocket"></i>
+                    Launch Question Bank
+                </button>
+                <button class="qb-secondary-btn" onclick="openQuickPractice()">
+                    <i class="fas fa-bolt"></i>
+                    Quick Practice
+                </button>
+            </div>
+        </div>
+    `;
+    
+    const featuredSection = document.querySelector('.resources-section');
+    featuredSection.parentNode.insertBefore(questionBankSection, featuredSection.nextSibling);
+}
+
+// Call this function to add the Question Bank section
+addQuestionBankSection();
+
+// Question Bank Modal Function (simplified - no CSS loading here)
+function openQuestionBank() {
+    // Close any existing modals first
+    document.querySelectorAll('.modal').forEach(modal => modal.remove());
+    
+    const questionBankModal = document.createElement('div');
+    questionBankModal.className = 'modal active';
+    questionBankModal.id = 'questionBankModal';
+    
+    questionBankModal.innerHTML = `
+        <div class="modal-content question-bank-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-database"></i>
+                    Question Bank
+                </h2>
+                <button class="close-modal" onclick="closeQuestionBank()">&times;</button>
+            </div>
+            
+            <div class="qb-quick-stats">
+                <div class="qb-stat-card">
+                    <i class="fas fa-question-circle"></i>
+                    <div class="qb-stat-info">
+                        <div class="qb-stat-number">10K+</div>
+                        <div class="qb-stat-label">Total Questions</div>
+                    </div>
+                </div>
+                <div class="qb-stat-card">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="qb-stat-info">
+                        <div class="qb-stat-number">100+</div>
+                        <div class="qb-stat-label">Worksheets</div>
+                    </div>
+                </div>
+                <div class="qb-stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="qb-stat-info">
+                        <div class="qb-stat-number">2015-2025</div>
+                        <div class="qb-stat-label">PYQ Years</div>
+                    </div>
+                </div>
+                <div class="qb-stat-card">
+                    <i class="fas fa-books"></i>
+                    <div class="qb-stat-info">
+                        <div class="qb-stat-number">16</div>
+                        <div class="qb-stat-label">Subjects</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="qb-controls">
+                <div class="qb-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search questions..." id="qbSearch">
+                </div>
+                <div class="qb-filters">
+                    <select id="qbSubject">
+                        <option value="all">All Subjects</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="biology">Biology</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="history">History</option>
+                        <option value="political">Political Science</option>
+                        <option value="geography">Geography</option>
+                        <option value="economics">Economics</option>
+                        <option value="hindi-grammar">Hindi Grammar</option>
+                        <option value="kshitij">Kshitij</option>
+                        <option value="kritika">Kritika</option>
+                        <option value="grammar">English Grammar</option>
+                        <option value="beehive">Beehive</option>
+                        <option value="moments">Moments</option>
+                        <option value="it-parta">IT - Part A</option>
+                        <option value="it-partb">IT - Part B</option>
+                    </select>
+                    <select id="qbType">
+                        <option value="all">All Types</option>
+                        <option value="pyq">Previous Year Questions</option>
+                        <option value="worksheet">Worksheet</option>
+                        <option value="mcq">Multiple Choice</option>
+                        <option value="short">Short Answer</option>
+                        <option value="long">Long Answer</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="qb-subjects-section">
+                <h3>Browse by Subject</h3>
+                <div class="qb-subjects-grid" id="qbSubjectsGrid">
+                    <!-- Subjects will be loaded here -->
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(questionBankModal);
+    loadQuestionBankSubjects();
+    // No need to call addQuestionBankModalStyles() here since CSS is already loaded
+}
+
+function closeQuestionBank() {
+    const modal = document.getElementById('questionBankModal');
+    if (modal) modal.remove();
+}
+
+function loadQuestionBankSubjects() {
+    const subjectsGrid = document.getElementById('qbSubjectsGrid');
+    const subjects = [
+        { name: 'Physics', icon: 'fas fa-atom', color: '#6c63ff', questions: 850, key: 'physics' },
+        { name: 'Chemistry', icon: 'fas fa-flask', color: '#ff6b6b', questions: 720, key: 'chemistry' },
+        { name: 'Biology', icon: 'fas fa-dna', color: '#4CAF50', questions: 680, key: 'biology' },
+        { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: '#FF9800', questions: 950, key: 'mathematics' },
+        { name: 'History', icon: 'fas fa-monument', color: '#9C27B0', questions: 450, key: 'history' },
+        { name: 'Political Science', icon: 'fas fa-landmark', color: '#2196F3', questions: 380, key: 'political' },
+        { name: 'Geography', icon: 'fas fa-globe-asia', color: '#009688', questions: 420, key: 'geography' },
+        { name: 'Economics', icon: 'fas fa-chart-line', color: '#795548', questions: 350, key: 'economics' },
+        { name: 'Hindi Grammar', icon: 'fas fa-language', color: '#E91E63', questions: 280, key: 'hindi-grammar' },
+        { name: 'Kshitij', icon: 'fas fa-book-reader', color: '#FF5722', questions: 320, key: 'kshitij' },
+        { name: 'Kritika', icon: 'fas fa-book-open', color: '#607D8B', questions: 250, key: 'kritika' },
+        { name: 'English Grammar', icon: 'fas fa-pen-fancy', color: '#3F51B5', questions: 400, key: 'grammar' },
+        { name: 'Beehive', icon: 'fas fa-book', color: '#00BCD4', questions: 380, key: 'beehive' },
+        { name: 'Moments', icon: 'fas fa-bookmark', color: '#8BC34A', questions: 300, key: 'moments' },
+        { name: 'IT - Part A', icon: 'fas fa-user-tie', color: '#FFC107', questions: 200, key: 'it-parta' },
+        { name: 'IT - Part B', icon: 'fas fa-laptop-code', color: '#9C27B0', questions: 220, key: 'it-partb' }
+    ];
+    
+    subjectsGrid.innerHTML = subjects.map(subject => `
+        <div class="qb-subject-item" onclick="openSubjectQuestionBank('${subject.key}')">
+            <div class="subject-icon" style="background: ${subject.color}">
+                <i class="${subject.icon}"></i>
+            </div>
+            <div class="subject-info">
+                <h4>${subject.name}</h4>
+                <p>${subject.questions} questions</p>
+            </div>
+            <div class="subject-arrow">
+                <i class="fas fa-external-link-alt"></i>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openSubjectQuestionBank(subjectKey) {
+    const folderLink = questionBankLinks[subjectKey];
+    if (folderLink) {
+        // Open Google Drive folder in new tab
+        window.open(folderLink, '_blank', 'noopener,noreferrer');
+    } else {
+        alert('Question bank folder for this subject is not available yet.');
+    }
+}
+
+function openQuickPractice() {
+    alert('Quick practice feature coming soon!');
+}
+
+
+// Debounce resize events for better performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Handle orientation changes
+window.addEventListener('resize', debounce(function() {
+    // Your responsive JS code here
+}, 250));
+
+// Touch event support
+document.addEventListener('touchstart', function() {
+    // Add touch-specific interactions
+}, { passive: true });
+
+// Modern Study Hub Themed Marks Calculator
+function initializeMarksCalculator() {
+    const calculatorHTML = `
+        <section id="marks-calculator" style="
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        ">
+            <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+                <!-- Header -->
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <div style="
+                        background: white;
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 1rem;
+                        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                    ">
+                        <span style="font-size: 1.5rem; color: #667eea;">📊</span>
+                    </div>
+                    <h1 style="color: white; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                        Grade Calculator
+                    </h1>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-top: 0.5rem;">
+                        Calculate your grades and track your academic progress
+                    </p>
+                </div>
+
+                <!-- Calculator Cards Container -->
+                <div style="display: grid; gap: 1.5rem;">
+                    <!-- Current Grade Card -->
+                    <div class="calc-card" style="
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                        border: 1px solid rgba(255,255,255,0.2);
+                    ">
+                        <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                            <div style="
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-right: 1rem;
+                            ">
+                                <span style="color: white; font-size: 1.2rem;">🎯</span>
+                            </div>
+                            <h3 style="margin: 0; color: #2d3748; font-size: 1.4rem;">Target Grade Calculator</h3>
+                        </div>
+                        
+                        <div style="display: grid; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                                    Current Grade (%)
+                                </label>
+                                <input type="number" id="current-grade" style="
+                                    width: 100%;
+                                    padding: 1rem;
+                                    border: 2px solid #e2e8f0;
+                                    border-radius: 12px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                " placeholder="Enter your current grade" min="0" max="100" step="0.1">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                                    Completed Work Weight (%)
+                                </label>
+                                <input type="number" id="weight-completed" style="
+                                    width: 100%;
+                                    padding: 1rem;
+                                    border: 2px solid #e2e8f0;
+                                    border-radius: 12px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                " placeholder="Weight of completed assignments" min="0" max="100" step="0.1">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                                    Target Grade (%)
+                                </label>
+                                <input type="number" id="target-grade" style="
+                                    width: 100%;
+                                    padding: 1rem;
+                                    border: 2px solid #e2e8f0;
+                                    border-radius: 12px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                " placeholder="Your target grade" min="0" max="100" step="0.1" value="85">
+                            </div>
+                        </div>
+                        
+                        <button onclick="calculateRequiredGrade()" style="
+                            background: linear-gradient(135deg, #667eea, #764ba2);
+                            color: white;
+                            padding: 1rem 2rem;
+                            border: none;
+                            border-radius: 12px;
+                            cursor: pointer;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            width: 100%;
+                            transition: all 0.3s ease;
+                        ">Calculate Required Grade</button>
+                        
+                        <div id="required-grade-result" style="
+                            background: linear-gradient(135deg, #48bb78, #38a169);
+                            color: white;
+                            padding: 1.5rem;
+                            border-radius: 12px;
+                            margin-top: 1.5rem;
+                            display: none;
+                            text-align: center;
+                        ">
+                            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.2rem;">
+                                You need <span id="required-grade" style="font-weight: 800;">0</span>% on remaining work
+                            </h4>
+                            <p style="margin: 0; opacity: 0.9;" id="required-grade-message"></p>
+                        </div>
+                    </div>
+
+                    <!-- Final Grade Card -->
+                    <div class="calc-card" style="
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                        border: 1px solid rgba(255,255,255,0.2);
+                    ">
+                        <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                            <div style="
+                                background: linear-gradient(135deg, #f093fb, #f5576c);
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-right: 1rem;
+                            ">
+                                <span style="color: white; font-size: 1.2rem;">📈</span>
+                            </div>
+                            <h3 style="margin: 0; color: #2d3748; font-size: 1.4rem;">Grade Predictor</h3>
+                        </div>
+                        
+                        <div id="grade-inputs">
+                            <div class="grade-item" style="
+                                display: grid;
+                                grid-template-columns: 2fr 1fr 1fr auto;
+                                gap: 0.75rem;
+                                margin-bottom: 1rem;
+                                align-items: end;
+                            ">
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">
+                                        Assignment
+                                    </label>
+                                    <input type="text" class="assignment-name" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        border: 2px solid #e2e8f0;
+                                        border-radius: 8px;
+                                        font-size: 0.9rem;
+                                    " placeholder="Assignment name">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">
+                                        Grade (%)
+                                    </label>
+                                    <input type="number" class="assignment-grade" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        border: 2px solid #e2e8f0;
+                                        border-radius: 8px;
+                                        font-size: 0.9rem;
+                                    " placeholder="Grade" min="0" max="100" step="0.1">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">
+                                        Weight (%)
+                                    </label>
+                                    <input type="number" class="assignment-weight" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        border: 2px solid #e2e8f0;
+                                        border-radius: 8px;
+                                        font-size: 0.9rem;
+                                    " placeholder="Weight" min="0" max="100" step="0.1">
+                                </div>
+                                <button class="btn-remove" onclick="removeGradeItem(this)" style="
+                                    background: #fed7d7;
+                                    color: #c53030;
+                                    border: none;
+                                    border-radius: 8px;
+                                    width: 40px;
+                                    height: 40px;
+                                    cursor: pointer;
+                                    font-size: 1.2rem;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                ">×</button>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+                            <button onclick="addGradeItem()" style="
+                                background: #edf2f7;
+                                color: #4a5568;
+                                padding: 0.75rem 1.5rem;
+                                border: 2px dashed #cbd5e0;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-size: 0.9rem;
+                                font-weight: 600;
+                                flex: 1;
+                                transition: all 0.3s ease;
+                            ">+ Add Assignment</button>
+                            <button onclick="calculateFinalGrade()" style="
+                                background: linear-gradient(135deg, #f093fb, #f5576c);
+                                color: white;
+                                padding: 0.75rem 1.5rem;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-size: 0.9rem;
+                                font-weight: 600;
+                                flex: 1;
+                                transition: all 0.3s ease;
+                            ">Calculate Final Grade</button>
+                        </div>
+                        
+                        <div id="final-grade-result" style="
+                            background: linear-gradient(135deg, #667eea, #764ba2);
+                            color: white;
+                            padding: 1.5rem;
+                            border-radius: 12px;
+                            display: none;
+                            text-align: center;
+                        ">
+                            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.2rem;">
+                                Predicted Grade: <span id="final-grade" style="font-weight: 800;">0</span>%
+                            </h4>
+                            <p style="margin: 0; opacity: 0.9;">
+                                Letter Grade: <span id="letter-grade" style="font-weight: 600;">-</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+
+    // Inject into page
+    const container = document.createElement('div');
+    container.innerHTML = calculatorHTML;
+    document.body.appendChild(container);
+
+    // Add interactive styles
+    addInteractiveStyles();
+}
+
+function addInteractiveStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        input:focus {
+            border-color: #667eea !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .calc-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .calc-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            .grade-item {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            #marks-calculator > div {
+                padding: 0 15px !important;
+            }
+            
+            .calc-card {
+                padding: 1.5rem !important;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Calculator Functions
+function calculateRequiredGrade() {
+    const currentGrade = parseFloat(document.getElementById('current-grade').value);
+    const weightCompleted = parseFloat(document.getElementById('weight-completed').value);
+    const targetGrade = parseFloat(document.getElementById('target-grade').value);
+    
+    if (isNaN(currentGrade) || isNaN(weightCompleted) || isNaN(targetGrade)) {
+        alert('Please fill in all fields with valid numbers');
+        return;
+    }
+    
+    const weightRemaining = 100 - weightCompleted;
+    
+    if (weightRemaining <= 0) {
+        alert('Weight of completed work cannot be 100% or more');
+        return;
+    }
+    
+    const requiredGrade = ((targetGrade - (currentGrade * weightCompleted / 100)) / weightRemaining) * 100;
+    
+    const resultBox = document.getElementById('required-grade-result');
+    const requiredGradeSpan = document.getElementById('required-grade');
+    const messageSpan = document.getElementById('required-grade-message');
+    
+    requiredGradeSpan.textContent = Math.max(0, requiredGrade).toFixed(1);
+    
+    if (requiredGrade > 100) {
+        messageSpan.textContent = "This target may be difficult to achieve. Consider adjusting your goal.";
+        resultBox.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+    } else if (requiredGrade > 85) {
+        messageSpan.textContent = "You'll need to work hard! Stay focused and organized.";
+        resultBox.style.background = 'linear-gradient(135deg, #ed8936, #dd6b20)';
+    } else {
+        messageSpan.textContent = "This is an achievable goal! Keep up the good work.";
+        resultBox.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+    }
+    
+    resultBox.style.display = 'block';
+}
+
+function addGradeItem() {
+    const container = document.getElementById('grade-inputs');
+    const newItem = document.createElement('div');
+    newItem.className = 'grade-item';
+    newItem.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 0.75rem; margin-bottom: 1rem; align-items: end;';
+    newItem.innerHTML = `
+        <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">Assignment</label>
+            <input type="text" class="assignment-name" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem;" placeholder="Assignment name">
+        </div>
+        <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">Grade (%)</label>
+            <input type="number" class="assignment-grade" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem;" placeholder="Grade" min="0" max="100" step="0.1">
+        </div>
+        <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-size: 0.9rem; font-weight: 600;">Weight (%)</label>
+            <input type="number" class="assignment-weight" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem;" placeholder="Weight" min="0" max="100" step="0.1">
+        </div>
+        <button class="btn-remove" onclick="removeGradeItem(this)" style="background: #fed7d7; color: #c53030; border: none; border-radius: 8px; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">×</button>
+    `;
+    container.appendChild(newItem);
+}
+
+function removeGradeItem(button) {
+    if (document.querySelectorAll('.grade-item').length > 1) {
+        button.parentElement.remove();
+    } else {
+        alert('You need at least one assignment');
+    }
+}
+
+function calculateFinalGrade() {
+    const gradeItems = document.querySelectorAll('.grade-item');
+    let totalWeight = 0;
+    let weightedSum = 0;
+    let hasData = false;
+    
+    gradeItems.forEach(item => {
+        const grade = parseFloat(item.querySelector('.assignment-grade').value) || 0;
+        const weight = parseFloat(item.querySelector('.assignment-weight').value) || 0;
+        
+        if (grade > 0 || weight > 0) {
+            hasData = true;
+        }
+        
+        weightedSum += grade * weight;
+        totalWeight += weight;
+    });
+    
+    if (!hasData || totalWeight === 0) {
+        alert('Please enter at least one assignment with grade and weight');
+        return;
+    }
+    
+    const finalGrade = weightedSum / totalWeight;
+    const letterGrade = getLetterGrade(finalGrade);
+    
+    const resultBox = document.getElementById('final-grade-result');
+    const finalGradeSpan = document.getElementById('final-grade');
+    const letterGradeSpan = document.getElementById('letter-grade');
+    
+    finalGradeSpan.textContent = finalGrade.toFixed(1);
+    letterGradeSpan.textContent = letterGrade;
+    resultBox.style.display = 'block';
+}
+
+function getLetterGrade(percentage) {
+    if (percentage >= 97) return 'A+';
+    if (percentage >= 93) return 'A';
+    if (percentage >= 90) return 'A-';
+    if (percentage >= 87) return 'B+';
+    if (percentage >= 83) return 'B';
+    if (percentage >= 80) return 'B-';
+    if (percentage >= 77) return 'C+';
+    if (percentage >= 73) return 'C';
+    if (percentage >= 70) return 'C-';
+    if (percentage >= 67) return 'D+';
+    if (percentage >= 63) return 'D';
+    if (percentage >= 60) return 'D-';
+    return 'F';
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', initializeMarksCalculator);
+
+
+
+// Update the button click handler
+document.querySelectorAll('.resource-item .download-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const url = this.getAttribute('data-url');
+        const resourceName = this.closest('.resource-item').querySelector('.resource-name').textContent;
+        openPDFViewer(resourceName, url);
+    });
+});
+    </script>
+</body>
+</html>
